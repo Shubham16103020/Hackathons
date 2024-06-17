@@ -1,0 +1,5 @@
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from config.settings import CLASSIFICATION_MODEL_NAME
+
+classification_model = AutoModelForSequenceClassification.from_pretrained(CLASSIFICATION_MODEL_NAME)
+classification_tokenizer = AutoTokenizer.from_pretrained(CLASSIFICATION_MODEL_NAME)

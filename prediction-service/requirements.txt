@@ -1,0 +1,9 @@
+flask
+transformers
+fuzzywuzzy
+torch
+langdetect
+soundfile
+librosa
+flask_cors
+requests
