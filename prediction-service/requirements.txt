@@ -1,9 +1,28 @@
-flask
-transformers
-fuzzywuzzy
-torch
-langdetect
-soundfile
-librosa
-flask_cors
-requests
+# Prediction Service
+
+This repository contains a Flask-based prediction service that utilizes Transformers for natural language processing tasks.
+
+## Setup
+
+Follow these steps to set up and run the prediction service locally:
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Shubham16103020/Hackathons.git
+cd prediction-service
+
+python3 -m venv venv
+source venv/bin/activate
+pip install flask langdetect transformers fuzzywuzzy torch sentencepiece
+
+Additional Dependencies 
+
+pip install transformers fuzzywuzzy
+pip install torch
+pip install sentencepiece
+pip install flask_cors
+pip install soundfile
+pip install librosa
+
+Run by using :- FLASK_APP=app.py flask run
