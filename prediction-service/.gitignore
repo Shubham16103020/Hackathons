@@ -1,0 +1,36 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Environment variables
+.env
+
+# Static files directory (if separate)
+/prediction-service/static/
+
+# Configuration files that may contain sensitive information
+/prediction-service/instance/
+
+# Virtual environment
+venv/
+.env/
+
+# IDE files
+.vscode/
+*.idea/
+
+# Compiled Python bytecode
+*.pyc
+
+# Package files
+*.egg-info/
+*.egg
+
+# Other
+*.bak
+*.swp

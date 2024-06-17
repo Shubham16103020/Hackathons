@@ -1,0 +1,12 @@
+
+# Static files directory (if separate)
+prediction-service/venv/
+prediction-service/*.pyc
+
+# IDE files
+.vscode/
+*.idea/
+
+# Compiled Python bytecode
+prediction-service/*.pyc
+
