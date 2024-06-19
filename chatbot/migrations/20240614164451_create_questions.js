@@ -10,7 +10,6 @@ exports.up = async function(knex) {
     table.string('label', 255);
     table.string('type', 50);
     table.string('placeholder', 255);
-    // table.boolean('draft').defaultTo(true);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
