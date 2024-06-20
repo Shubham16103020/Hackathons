@@ -26,6 +26,7 @@ exports.up = async function(knex) {
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
   });
+
 };
 
 
