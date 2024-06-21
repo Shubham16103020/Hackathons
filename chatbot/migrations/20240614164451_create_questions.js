@@ -6,8 +6,6 @@ exports.up = async function(knex) {
     table.text('question_text');
     table.integer('sequence');
     table.boolean('is_mandatory').defaultTo(false);
-    table.string('name', 255).notNullable();
-    table.string('label', 255);
     table.string('type', 50);
     table.string('placeholder', 255);
     table.timestamp('created_at').defaultTo(knex.fn.now());
