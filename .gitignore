@@ -2,6 +2,7 @@
 # Static files directory (if separate)
 prediction-service/venv/
 prediction-service/*.pyc
+chatbot/node_modules
 
 # IDE files
 .vscode/

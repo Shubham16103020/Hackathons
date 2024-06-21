@@ -20,8 +20,6 @@ exports.up = async function(knex) {
     table.integer('question_id').unsigned();
     table.foreign('question_id').references('questions.id'); // Correct schema qualification
     table.text('answer_text');
-    table.boolean('is_correct');
-    table.date('date_created');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
