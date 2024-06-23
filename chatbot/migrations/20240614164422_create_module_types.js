@@ -22,11 +22,19 @@ exports.up = async function(knex) {
   await knex.schema.withSchema('configuration').createTable('modules', function(table) {
     table.increments('id').primary();
     table.integer('template_id').unsigned().notNullable();
-    table.foreign('template_id').references('templates.id');
     table.string('module_type', 50);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
+    
+    //constraints
+    table
+    .foreign('template_id')
+    .references('id')
+    .inTable('configuration.templates')
+    .onUpdate('NO ACTION')
+    .onDelete('NO ACTION');
+
   });
   await knex.raw('ALTER SEQUENCE configuration.modules_id_seq RESTART WITH 1000000');
   await knex.raw(`

@@ -24,11 +24,18 @@ exports.up = async function(knex) {
   await knex.schema.withSchema('configuration').createTable('answers', function(table) {
     table.increments('id').primary();
     table.integer('question_id').unsigned();
-    table.foreign('question_id').references('questions.id'); // Correct schema qualification
     table.text('answer_text');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
+
+    //constraints
+    table
+      .foreign('question_id')
+      .references('id')
+      .inTable('configuration.questions')
+      .onUpdate('NO ACTION')
+      .onDelete('NO ACTION');
   });
   await knex.raw('ALTER SEQUENCE configuration.answers_id_seq RESTART WITH 1000000');
   await knex.raw(`
