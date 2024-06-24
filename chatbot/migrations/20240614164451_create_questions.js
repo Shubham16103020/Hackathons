@@ -1,17 +1,53 @@
+'use strict';
+
+const category = {
+  DROPDOWN_SINGLE_SELECT: "DD_SS",
+  DROPDOWN_MULTI_SELECT: "DD_MS",
+  CHECKBOX: "CB",
+  FREE_TEXT: "FT",
+  FREE_TEXT_CURRENCY: "FT_CU",
+  FREE_TEXT_PERCENTAGE: "FT_PR",
+  FREE_TEXT_NUMBER: "FT_NU",
+};
+
+const noGoTypes = {
+  RANGE: "RANGE",
+  MATH: "MATH",
+  INCLUDES: "INCLUDES",
+};
+
 exports.up = async function(knex) {
   console.log(`creating configuration.questions table`);
   await knex.schema.withSchema('configuration').createTable('questions', function(table) {
     table.increments('id').primary();
     table.integer('module_id').unsigned();
-    table.foreign('module_id').references('module.id'); // Correct schema qualification
     table.text('question_text');
     table.integer('sequence');
     table.boolean('is_mandatory').defaultTo(false);
-    table.string('type', 50);
+    table.enu('category', [category.DROPDOWN_SINGLE_SELECT,
+      category.DROPDOWN_MULTI_SELECT,
+      category.CHECKBOX,
+      category.RADIO,
+      category.FREE_TEXT,
+      category.FREE_TEXT_CURRENCY,
+      category.FREE_TEXT_PERCENTAGE,
+      category.FREE_TEXT_NUMBER], {
+          useNative: true,
+          existingType: false,
+          enumName: 'questions_category'
+      }).defaultTo(category.FREE_TEXT);
     table.string('placeholder', 255);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
+
+    //constraints
+    table
+      .foreign('module_id')
+      .references('id')
+      .inTable('configuration.modules')
+      .onUpdate('NO ACTION')
+      .onDelete('NO ACTION');
   });
   await knex.raw('ALTER SEQUENCE configuration.questions_id_seq RESTART WITH 1000000');
   await knex.raw(`
@@ -24,7 +60,13 @@ exports.up = async function(knex) {
   await knex.schema.withSchema('configuration').createTable('answers', function(table) {
     table.increments('id').primary();
     table.integer('question_id').unsigned();
-    table.text('answer_text');
+    table.specificType('valid_answer', 'TEXT[]');
+    table.enu('no_go_type', [noGoTypes.RANGE, noGoTypes.MATH, noGoTypes.INCLUDES], {
+      useNative: true,
+      existingType: false,
+      enumName: 'no_go_type'
+  }).defaultTo(null);
+    table.text('no_go_criteria');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
@@ -34,6 +76,7 @@ exports.up = async function(knex) {
       .foreign('question_id')
       .references('id')
       .inTable('configuration.questions')
+      .withKeyName('questions_module_id_fkey')
       .onUpdate('NO ACTION')
       .onDelete('NO ACTION');
   });
