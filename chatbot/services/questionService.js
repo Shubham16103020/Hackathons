@@ -1,4 +1,5 @@
 const db = require('../db');
+const {insertIntoTable, insertTemplate } = require(`./db_service/configuration`);
 
 // Service functions for questions
 async function addQuestion(moduleTypeId, question) {
