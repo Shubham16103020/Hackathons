@@ -21,6 +21,7 @@ exports.up = async function(knex) {
   await knex.schema.withSchema('configuration').createTable('questions', function(table) {
     table.increments('id').primary();
     table.integer('template_id').unsigned();
+    table.text('question_code');
     table.text('question_text');
     table.integer('sequence');
     table.boolean('is_mandatory').defaultTo(false);
@@ -66,6 +67,7 @@ exports.up = async function(knex) {
       enumName: 'no_go_type'
   }).defaultTo(null);
     table.text('no_go_criteria');
+    table.text('error_text');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at');
     table.timestamp('deleted_at');

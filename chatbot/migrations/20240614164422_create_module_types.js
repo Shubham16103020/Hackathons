@@ -21,6 +21,7 @@ exports.up = async function(knex) {
     table.integer('module_id').unsigned().notNullable();
     table.string('template').notNullable();
     table.string('template_name', 50);
+    table.Jsonb('template_payload');
     table.string('endpoint', 50);
     table.integer('version').notNullable();
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
