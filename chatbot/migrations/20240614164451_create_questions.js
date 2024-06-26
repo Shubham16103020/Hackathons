@@ -20,14 +20,13 @@ exports.up = async function(knex) {
   console.log(`creating configuration.questions table`);
   await knex.schema.withSchema('configuration').createTable('questions', function(table) {
     table.increments('id').primary();
-    table.integer('module_id').unsigned();
+    table.integer('template_id').unsigned();
     table.text('question_text');
     table.integer('sequence');
     table.boolean('is_mandatory').defaultTo(false);
     table.enu('category', [category.DROPDOWN_SINGLE_SELECT,
       category.DROPDOWN_MULTI_SELECT,
       category.CHECKBOX,
-      category.RADIO,
       category.FREE_TEXT,
       category.FREE_TEXT_CURRENCY,
       category.FREE_TEXT_PERCENTAGE,
@@ -41,11 +40,11 @@ exports.up = async function(knex) {
     table.timestamp('updated_at');
     table.timestamp('deleted_at');
 
-    //constraints
+    //foreign constraint
     table
-      .foreign('module_id')
+      .foreign('template_id')
       .references('id')
-      .inTable('configuration.modules')
+      .inTable('configuration.templates')
       .onUpdate('NO ACTION')
       .onDelete('NO ACTION');
   });
@@ -76,7 +75,6 @@ exports.up = async function(knex) {
       .foreign('question_id')
       .references('id')
       .inTable('configuration.questions')
-      .withKeyName('questions_module_id_fkey')
       .onUpdate('NO ACTION')
       .onDelete('NO ACTION');
   });
@@ -93,13 +91,15 @@ exports.down = async function(knex) {
   console.log(`Dropping configuration.answers table`);
   await Promise.all([ 
     knex.schema.withSchema('configuration').dropTableIfExists('answers'),
-    knex.schema.withSchema('configuration').raw(`DROP SEQUENCE IF EXISTS configuration.answers_id_seq;`)
+    knex.schema.withSchema('configuration').raw(`DROP SEQUENCE IF EXISTS configuration.answers_id_seq;`),
+    knex.schema.withSchema('configuration').raw(`DROP TYPE IF EXISTS configuration.no_go_type;`),
   ]);
 
   console.log(`Dropping configuration.questions table`);
   await Promise.all([ 
     knex.schema.withSchema('configuration').dropTableIfExists('questions'),
-    knex.schema.withSchema('configuration').raw(`DROP SEQUENCE IF EXISTS configuration.questions_id_seq;`)
+    knex.schema.withSchema('configuration').raw(`DROP SEQUENCE IF EXISTS configuration.questions_id_seq;`),
+    knex.schema.withSchema('configuration').raw(`DROP TYPE IF EXISTS configuration.questions_category;`),
   ]);
   
 };
