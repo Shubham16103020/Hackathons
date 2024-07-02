@@ -28,7 +28,7 @@ exports.seed = function(knex) {
         {id: 406, question_id: 306, valid_answer: null, no_go_type: null, no_go_criteria: null},
         {id: 407, question_id: 307, valid_answer: null, no_go_type: null, no_go_criteria: null},
         {id: 408, question_id: 308, valid_answer: ['YES', 'NO'], no_go_type: noGoTypes.INCLUDES, no_go_criteria: 'YES'},
-        {id: 409, question_id: 309, valid_answer: null, no_go_type: null, no_go_criteria: null},
+        {id: 409, question_id: 309, valid_answer: ["Trading","Agriculture","Food"], no_go_type: null, no_go_criteria: null},
         {id: 410, question_id: 310, valid_answer: ['YES', 'NO'], no_go_type: noGoTypes.INCLUDES, no_go_criteria: 'YES'},
         {id: 411, question_id: 311, valid_answer: null, no_go_type: noGoTypes.MATH, no_go_criteria: '<10'},
         {id: 412, question_id: 312, valid_answer: ['YES', 'NO'], no_go_type: noGoTypes.INCLUDES, no_go_criteria: 'YES'},
