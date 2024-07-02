@@ -47,3 +47,9 @@ def predict_service_v1(file, question_id):
         predicted_class_id = logits.argmax().item()
 
     return {"input": corrected_input, "prediction": predicted_class_id}
+
+def metadata_service():
+    response = requests.get(f'{QUESTION_SERVER_BASE_URL}/metadata')
+    if response.status_code != 200:
+        return {"error": "Failed to fetch metadata"}, response.status_code
+    return response.json()

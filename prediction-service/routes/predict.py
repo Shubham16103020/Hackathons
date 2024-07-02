@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from services.text_service import predict_service, predict_service_v1
+from services.text_service import predict_service, predict_service_v1, metadata_service
 
 predict_bp = Blueprint('predict', __name__)
 
@@ -44,4 +44,10 @@ def handle_predict_v1():
         return jsonify({"error": "Invalid input data"}), 400
 
     result = predict_service_v1(user_input, question_id)
+    return jsonify(result)
+
+
+@predict_bp.route('/metadata', methods=['GET'])
+def metadata():
+    result = metadata_service()
     return jsonify(result)
