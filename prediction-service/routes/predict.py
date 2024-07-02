@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from services.text_service import predict_service, predict_service_v1
+from services.text_service import predict_service, predict_service_v1, metadata_service
 
 predict_bp = Blueprint('predict', __name__)
 
