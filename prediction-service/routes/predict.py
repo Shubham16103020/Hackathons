@@ -5,21 +5,15 @@ predict_bp = Blueprint('predict', __name__)
 
 @predict_bp.route('/predict', methods=['POST'])
 def handle_predict():
-    data = request.form
-    user_input = data.get("input")
-    question_id = data.get("question_id")
-    target_language = data.get("target_language", "en")
+    data = request.json
+    category_id = data.get("category_id")
+    category_type = data.get("category_type")
+    message = data.get("message")
 
-    if 'file' in request.files:
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({"error": "No selected file"}), 400
-        user_input = predict_service(file, question_id, target_language)
-
-    if not user_input or not question_id:
+    if not category_id or not category_type:
         return jsonify({"error": "Invalid input data"}), 400
 
-    result = predict_service(user_input, question_id)
+    result = predict_service(category_id, category_type, message)
     return jsonify(result)
 
 predict_v1 = Blueprint('predict_v1', __name__)
@@ -44,4 +38,32 @@ def handle_predict_v1():
         return jsonify({"error": "Invalid input data"}), 400
 
     result = predict_service_v1(user_input, question_id)
+    return jsonify(result)
+
+@predict_bp.route('/metadata', methods=['GET'])
+def metadata():
+    category_id = request.args.get("category_id")
+    category_type = request.args.get("category_type")
+    command = request.args.get("command", "")
+
+    if not category_id or not category_type:
+        return jsonify({"error": "category_id and category_type are required"}), 400
+
+    result = metadata_service(category_id, category_type, command)
+    
+    return jsonify(result)
+
+
+@predict_bp.route('/metadata/save', methods=['POST'])
+def save_metadata():
+    data = request.get_json()
+
+    predicted_message = data.get("predictedMessage")
+    command = data.get("command")
+    predicted_message_id = data.get("predictedMessageId")
+    category_id = data.get("category_id")
+    category_type = data.get("category_type")
+
+    result = save_metadata_service(predicted_message, command, predicted_message_id, category_id, category_type)
+    
     return jsonify(result)
