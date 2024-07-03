@@ -53,30 +53,43 @@ def preprocess_options(options):
 
 def predict_service(category_id, category_type, message):
     url = f'{QUESTION_SERVER_BASE_URL}/{category_type}/{category_id}'
+    command = 'success'
+
+    if category_type == 'MODULE':
+        command = 'success'
+    elif category_type == 'QUESTION':
+        command = 'questionAnswer'
+        
     response = requests.get(url)
-    command = "success" 
-    
+
     if response.status_code != 200:
         return {"error": "Failed to fetch question options"}, response.status_code
          
     question_options = response.json()
-    # options = [q['value'] for q in question_options]
-    processed_options = preprocess_options(question_options)
+    if isinstance(question_options[0], str):
+        options = question_options
+        processed_options = options
+    elif isinstance(question_options[0], dict) and 'value' in question_options[0]:
+        options = [q['value'] for q in question_options]
+        processed_options = preprocess_options(options)
+        id_to_value = {q['id']: q['value'] for q in question_options}
+        value_to_id = {q['value']: q['id'] for q in question_options}
 
     best_match, score = process.extractOne(message, processed_options)
+    validatedAnswerId = value_to_id[best_match]
 
     if score < 80:
         command = detect_command(message)
         if command in command_message_map:
             result = {"predictedMessage": command_message_map[command], "command": command}
     
-    post_url = f'{QUESTION_SERVER_BASE_URL}/{category_type}/{category_id}'
-    post_data = {"answer": best_match, "category_id": category_id, "category_type": category_type}
-    post_response = requests.post(post_url, json=post_data)
-    validatedAnswerId = None
-    if post_response.status_code == 200:
-            post_response_data = post_response.json()
-            validatedAnswerId = post_response_data.get("id") 
+    # post_url = f'{QUESTION_SERVER_BASE_URL}/{category_type}/{category_id}'
+    # post_data = {"answer": best_match, "category_id": category_id, "category_type": category_type}
+    # post_response = requests.post(post_url, json=post_data)
+    # validatedAnswerId = None
+    # if post_response.status_code == 200:
+    #         post_response_data = post_response.json()
+    #         validatedAnswerId = post_response_data.get("id") 
 
     response_data = {
         "predictedMessage": result["predictedMessage"],
