@@ -2,9 +2,9 @@ exports.up = async function(knex) {
     console.log(`creating commons.responses table`);
     await knex.schema.withSchema('commons').createTable('responses', function(table) {
       table.increments('id').primary();
-      table.string('response', 50);
-      table.integer('question_id').unsigned().notNullable();
-      table.string('user_id', 50);
+      table.jsonb('response').unsigned().notNullable();
+      table.integer('category_id', 50);
+      table.string('category_type', 50);
       table.timestamp('created_at').defaultTo(knex.fn.now());
       table.timestamp('updated_at');
       table.timestamp('deleted_at');
@@ -20,10 +20,12 @@ exports.up = async function(knex) {
     console.log(`creating commons.template_record table`);
     await knex.schema.withSchema('commons').createTable('template_record', table => {
       table.increments('id').primary();
-      table.string('user_id', 50);
+      table.integer('module_id', 50);
+      table.integer('template_id', 50);
+      table.string('status');
       table.jsonb('final_payload').unsigned().notNullable();
       table.integer('last_question_id').notNullable();
-      table.string('submit_status');
+      table.string('last_command');
       table.string('submit_endpoint', 50);
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
       table.timestamp('updated_at');
@@ -40,10 +42,10 @@ exports.up = async function(knex) {
   
   
   exports.down = async function(knex) {
-    console.log(`Dropping commons.templates table`);
+    console.log(`Dropping commons.template_record table`);
     await Promise.all([ 
-      knex.schema.withSchema('commons').dropTableIfExists('templates'),
-      knex.schema.withSchema('commons').raw(`DROP SEQUENCE IF EXISTS commons.templates_id_seq;`)
+      knex.schema.withSchema('commons').dropTableIfExists('template_record'),
+      knex.schema.withSchema('commons').raw(`DROP SEQUENCE IF EXISTS commons.template_record_id_seq;`)
     ]);
   
     console.log(`Dropping commons.responses table`);

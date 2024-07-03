@@ -127,7 +127,7 @@ def metadata_service(category_id, category_type, command):
     if response.status_code != 200:
         return {"error": "Failed to fetch metadata"}, response.status_code
     
-    return response.json(), 200
+    return response.json()
 
 def save_metadata_service(predicted_message, command, predicted_message_id, category_id, category_type):
     url = f'{QUESTION_SERVER_BASE_URL}/metadata/save'

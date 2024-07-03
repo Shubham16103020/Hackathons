@@ -46,11 +46,12 @@ def metadata():
     category_type = request.args.get("category_type")
     command = request.args.get("command", "")
 
-    if not category_id or not category_type:
-        return jsonify({"error": "category_id and category_type are required"}), 400
+    # if not category_id or not category_type:
+    #     return jsonify({"error": "category_id and category_type are required"}), 400
 
     result = metadata_service(category_id, category_type, command)
-    
+
+    print(f"Result: {result}")
     return jsonify(result)
 
 
