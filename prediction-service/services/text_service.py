@@ -6,7 +6,7 @@ from utils.audio_processing import audio_to_text, audio_to_text_v1
 import re
 import torch
 from sklearn.preprocessing import LabelEncoder
-
+import pickle
 
 from flask import Flask, request, jsonify
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -24,10 +24,12 @@ command_message_map = {
     "unknown": "Unknown command"
 }
 
-    
+
+with open('/Users/shubham/Documents/hackathonChatbot/Hackathons/prediction-service/services/label_encoder.pkl', 'rb') as file:
+    label_encoder = pickle.load(file)  
 def detect_command(message):
     fine_tuned_model_path = "./self_trained_distilbert"
-    # commands = label_encoder.classes_
+    commands = label_encoder.classes_
     tokenizer = AutoTokenizer.from_pretrained(fine_tuned_model_path)
     model = AutoModelForSequenceClassification.from_pretrained(fine_tuned_model_path)
 
@@ -63,7 +65,7 @@ def predict_service(category_id, category_type, message):
 
     best_match, score = process.extractOne(message, processed_options)
 
-    if score < 65:
+    if score < 80:
         command = detect_command(message)
         if command in command_message_map:
             result = {"predictedMessage": command_message_map[command], "command": command}
