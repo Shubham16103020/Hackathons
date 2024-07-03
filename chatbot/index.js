@@ -58,8 +58,10 @@ app.use(bodyParser.json());
 // Import route handlers
 const moduleRoutes = require('./routes/moduleRoutes');
 const questionRoutes = require('./routes/questionRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 // Use route handlers
+app.use('/metadata', chatbotRoutes);
 app.use('/modules', moduleRoutes);
 app.use('/questions', questionRoutes);
 

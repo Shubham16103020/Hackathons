@@ -1,13 +1,16 @@
 'use strict';
 
 const category = {
-  DROPDOWN_SINGLE_SELECT: "DD_SS",
-  DROPDOWN_MULTI_SELECT: "DD_MS",
-  CHECKBOX: "CB",
-  FREE_TEXT: "FT",
-  FREE_TEXT_CURRENCY: "FT_CU",
-  FREE_TEXT_PERCENTAGE: "FT_PR",
-  FREE_TEXT_NUMBER: "FT_NU",
+  DROPDOWN_SINGLE_SELECT: "selectType",
+  DROPDOWN_SINGLE_SELECT_KEY_VALUE: "keyValueSelectType",
+  DROPDOWN_MULTI_SELECT: "multiSelectType",
+  CHECKBOX: "checkboxBtn",
+  RADIO: "radioType",
+  DATE_TYPE: "dateType",
+  FREE_TEXT: "inputType",
+  FREE_TEXT_CURRENCY: "inputTypeCurrency",
+  FREE_TEXT_PERCENTAGE: "inputTypePercent",
+  FREE_TEXT_NUMBER: "inputTypeNumber",
 };
 
 const noGoTypes = {
@@ -26,8 +29,10 @@ exports.up = async function(knex) {
     table.integer('sequence');
     table.boolean('is_mandatory').defaultTo(false);
     table.enu('category', [category.DROPDOWN_SINGLE_SELECT,
+      category.DROPDOWN_SINGLE_SELECT_KEY_VALUE,
       category.DROPDOWN_MULTI_SELECT,
       category.CHECKBOX,
+      category.RADIO,
       category.FREE_TEXT,
       category.FREE_TEXT_CURRENCY,
       category.FREE_TEXT_PERCENTAGE,
